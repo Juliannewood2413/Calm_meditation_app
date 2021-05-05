@@ -12,6 +12,7 @@ const app = () => {
 
     //Time Display
     const timeDisplay = document.querySelector('.time-display');
+    const timeSelect = document.querySelectorAll('.time-select button')
     //Get the length of the outline
     const outlineLength = outline.getTotalLength();
     console.log(outlineLength);
@@ -23,10 +24,28 @@ const app = () => {
     outline.style.strokeDasharray = outlineLength;
     outline.style.strokeDashoffset = outlineLength;
 
+    //pick different sounds
+    sounds.forEach(sound => {
+        sound.addEventListener('click', function(){
+            song.src = this.getAttribute('data-sound');
+            video.src = this.getAttribute('data-video');
+            checkPlay(song);
+        })
+    });
+
     //play sounds
     play.addEventListener('click', () => {
         checkPlay(song);
     });
+
+    //select duration / sound
+    timeSelect.forEach(option => {
+        option.addEventListener('click', function(){
+            fakeDuration = this.getAttribute('data-time');
+            timeDisplay.textContent = `${Math.floor(fakeDuration / 60)}:${Math.floor(fakeDuration % 60)}`
+        })
+    })
+
 
     //create function specific to stop and play
     const checkPlay = song => {
@@ -52,6 +71,16 @@ const app = () => {
         //animate progress bar
         let progress = outlineLength - (currentTime / fakeDuration) * outlineLength;
         outline.style.strokeDashoffset = progress;
+
+        //animate text
+        timeDisplay.textContent = `${minutes}:${seconds}`;
+
+        if(currentTime >= fakeDuration){
+            song.pause();
+            song.currentTime = 0;
+            play.src = './svg/play.svg';
+            video.pause;
+        }
 
     }
 
