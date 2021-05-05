@@ -25,7 +25,6 @@ const app = () => {
 
     //play sounds
     play.addEventListener('click', () => {
-        song.play();
         checkPlay(song);
     });
 
@@ -40,6 +39,19 @@ const app = () => {
             video.pause();
             play.src= "./svg/play.svg";
         }
+
+    }
+
+    //animate the circle
+    song.ontimeupdate = () => {
+        let currentTime = song.currentTime;
+        let elapsed = fakeDuration - currentTime;
+        let seconds = Math.floor(elapsed % 60);
+        let minutes = Math.floor(elapsed / 60);
+
+        //animate progress bar
+        let progress = outlineLength - (currentTime / fakeDuration) * outlineLength;
+        outline.style.strokeDashoffset = progress;
 
     }
 
